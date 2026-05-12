@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { SafeAreaView, ScrollView, View } from "react-native";
 import { COLORS, SIZES } from "../constants/theme";
-import { AsyncStorage } from "@react-native-async-storage/async-storage"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 import ScreenHeaderBtn from "./ScreenHeaderBtn";
 import Welcome from "./Welcome";
 
