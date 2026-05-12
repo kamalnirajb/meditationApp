@@ -4,6 +4,8 @@ import { COLORS, SIZES } from "../constants/theme";
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import ScreenHeaderBtn from "./ScreenHeaderBtn";
 import Welcome from "./Welcome";
+import PopularMeditation from "./PopularMeditation";
+import DailyMeditation from "./DailyMeditation";
 
 const Home = () => {
 
@@ -32,6 +34,8 @@ const Home = () => {
                     testID="screensDisplay"
                 >
                     <Welcome userDetails={userDetails ? JSON.parse(userDetails) : null} />
+                    <PopularMeditation />
+                    <DailyMeditation />
                 </View>
             </ScrollView>
         </SafeAreaView>
