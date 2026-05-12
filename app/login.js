@@ -10,32 +10,48 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const router = useRouter();
 
-    const handleLogin = async () => {
-        if (!email || !password) {
+
+    const validateForm = () => {
+        if (!email && !password) {
             Alert.alert("Validation Error", "Please fill in all fields.");
-            return;
+            return false;
         }
+        if (!email) {
+            Alert.alert("Validation Error", "Please enter your email.");
+            return false;
+        }
+        if (!password) {
+            Alert.alert("Validation Error", "Please enter your password.");
+            return false;
+        }
+        return true;
+    };
 
-        const userDetails = { email, password, token: "sample-token" };
-
-        console.log('userDetails', userDetails);
-
+    const handleLogin = async () => {
         try {
-            const detailsDatafromSignup = await AsyncStorage.getItem("userDetails");
-            if (detailsDatafromSignup) {
-                const parsedDetails = JSON.parse(detailsDatafromSignup);
-                if (userDetails.email === parsedDetails.email && userDetails.password === parsedDetails.password) {
-                    router.push("/home");
-                } else {
-                    Alert.alert("Error", "Incorrect email or password.");
-                    alert("Error Incorrect email or password.");
-                }
-            } else {
-                Alert.alert("Error", "No user details found in AsyncStorage.");
-                alert("Error No user details found in AsyncStorage.");
+            const stored = await AsyncStorage.getItem("userDetails");
+            if (!stored) {
+                Alert.alert("Error", "No account found. Please sign up first.");
+                return false;
             }
+            const parsedDetails = JSON.parse(stored);
+            if (email === parsedDetails.email && password === parsedDetails.password) {
+                return true;
+            }
+            Alert.alert("Error", "Incorrect email or password.");
+            return false;
         } catch (error) {
             console.error("Error accessing AsyncStorage", error);
+            Alert.alert("Error", "Something went wrong. Please try again.");
+            return false;
+        }
+    };
+
+    const handleLoginPress = async () => {
+        if (!validateForm()) return;
+        const success = await handleLogin();
+        if (success) {
+            router.push("/home");
         }
     };
 
@@ -111,7 +127,7 @@ const Login = () => {
                             borderRadius: 5,
                             alignItems: "center",
                         }}
-                        onPress={handleLogin}
+                        onPress={handleLoginPress}
                     >
                         <Text style={{ color: "#fff", fontWeight: "bold" }}>Login</Text>
                     </TouchableOpacity>
