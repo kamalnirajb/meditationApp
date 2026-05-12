@@ -20,17 +20,46 @@ const SignUp = () => {
     const [password, setPassword] = useState("");
     const router = useRouter();
 
-    const handleRegister = async () => {
-        if (!userName || !email || !password) {
+    const validateForm = () => {
+        if (!userName && !email && !password) {
             Alert.alert("Validation Error", "Please fill in all fields.");
-            return;
+            return false;
         }
+        if (!userName) {
+            Alert.alert("Validation Error", "Please enter your username.");
+            return false;
+        }
+        if (!email) {
+            Alert.alert("Validation Error", "Please enter your email.");
+            return false;
+        }
+        if (!password) {
+            Alert.alert("Validation Error", "Please enter your password.");
+            return false;
+        }
+        return true;
+    };
 
-        const userDetails = { userName, email, password, token: "sample-token" };
-        await AsyncStorage.setItem("userDetails", JSON.stringify(userDetails));
-        console.log("User logged in:", userDetails);
+    const handleRegister = async () => {
+        try {
+            const userDetails = { userName, email, password, token: "sample-token" };
+            await AsyncStorage.setItem("userDetails", JSON.stringify(userDetails));
+            return true;
+        } catch (error) {
+            console.error("Error saving user details:", error);
+            Alert.alert("Registration Error", "Something went wrong. Please try again.");
+            return false;
+        }
+    };
 
-        router.push("/login");
+    const handlePress = async () => {
+        if (!validateForm()) return;
+        const success = await handleRegister();
+        if (success) {
+            Alert.alert("Success", "Account created successfully!", [
+                { text: "OK", onPress: () => router.push("/login") }
+            ]);
+        }
     };
 
 
@@ -127,7 +156,7 @@ const SignUp = () => {
                         alignItems: "center",
                         marginBottom: 10,
                     }}
-                    onPress={handleRegister}
+                    onPress={handlePress}
                     testID="handleRegister"
                 >
                     <Text style={{ color: "#fff", fontWeight: "bold" }}>Sign Up</Text>
