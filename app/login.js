@@ -36,6 +36,7 @@ const Login = () => {
             }
             const parsedDetails = JSON.parse(stored);
             if (email === parsedDetails.email && password === parsedDetails.password) {
+                await AsyncStorage.setItem("loginStatus", "true");
                 return true;
             }
             Alert.alert("Error", "Incorrect email or password.");

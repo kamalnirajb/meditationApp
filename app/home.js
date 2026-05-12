@@ -6,10 +6,11 @@ import ScreenHeaderBtn from "./ScreenHeaderBtn";
 import Welcome from "./Welcome";
 import PopularMeditation from "./PopularMeditation";
 import DailyMeditation from "./DailyMeditation";
+import DrawerMenu from "./DrawerMenu";
 
 const Home = () => {
-
     const [userDetails, setUserDetails] = useState(null);
+    const [drawerOpen, setDrawerOpen] = useState(false);
 
     useEffect(() => {
         loadUserDetails();
@@ -17,29 +18,35 @@ const Home = () => {
 
     const loadUserDetails = async () => {
         const user = await AsyncStorage.getItem("userDetails");
-        console.log("user", user);
         setUserDetails(user);
     };
 
+    const parsedUser = userDetails ? JSON.parse(userDetails) : null;
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
-            <ScreenHeaderBtn />
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <View
-                    style={{
-                        flex: 1,
-                        padding: SIZES.medium,
-                    }}
-                    testID="screensDisplay"
-                >
-                    <Welcome userDetails={userDetails ? JSON.parse(userDetails) : null} />
-                    <PopularMeditation />
-                    <DailyMeditation />
-                </View>
-            </ScrollView>
-        </SafeAreaView>
-
+        <View style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
+            <SafeAreaView style={{ flex: 1 }}>
+                <ScreenHeaderBtn onMenuPress={() => setDrawerOpen(true)} />
+                <ScrollView showsVerticalScrollIndicator={false}>
+                    <View
+                        style={{
+                            flex: 1,
+                            padding: SIZES.medium,
+                        }}
+                        testID="screensDisplay"
+                    >
+                        <Welcome userDetails={parsedUser} />
+                        <PopularMeditation />
+                        <DailyMeditation />
+                    </View>
+                </ScrollView>
+            </SafeAreaView>
+            <DrawerMenu
+                isOpen={drawerOpen}
+                onClose={() => setDrawerOpen(false)}
+                userDetails={parsedUser}
+            />
+        </View>
     );
 };
 

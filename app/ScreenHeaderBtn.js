@@ -1,18 +1,14 @@
-import { Image, TouchableOpacity, StyleSheet } from "react-native";
-import { View } from "react-native-web"; // You might want to use "react-native" instead if this is not web-based.
+import { Image, TouchableOpacity, StyleSheet, View } from "react-native";
 import { COLORS, SIZES } from "../constants/theme";
 import icons from "../constants/icons";
 import { useRouter } from "expo-router";
 
 
-const ScreenHeaderBtn = ({ detailPage, handleShare }) => {
-    console.log(detailPage);
-
-
+const ScreenHeaderBtn = ({ detailPage, handleShare, onMenuPress }) => {
     const router = useRouter();
     return (
         <View style={styles.btn}>
-            <TouchableOpacity style={styles.btnContainer} onPress={() => router.push("/home")}>
+            <TouchableOpacity style={styles.btnContainer} onPress={onMenuPress}>
                 <Image source={icons.menu} style={styles.image} />
             </TouchableOpacity>
 
@@ -41,7 +37,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingHorizontal: 10,
-        width: '100vw',
+        width: '100%',
     },
     image: {
         width: 30,

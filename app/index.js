@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Redirect } from "expo-router";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, View } from "react-native-web";
+import { ActivityIndicator, View } from "react-native";
 
 export default function Index() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -9,8 +9,8 @@ export default function Index() {
   useEffect(() => {
         const checkLoginState = async () => {
           try {
-            const user = await AsyncStorage.getItem("userDetails");
-            if (user) {
+            const loginStatus = await AsyncStorage.getItem("loginStatus");
+            if (loginStatus === "true") {
               setIsLoggedIn(true);
             }
           } catch (error) {
@@ -18,7 +18,7 @@ export default function Index() {
           }
           setIsLoading(false);
         };
-    
+
         checkLoginState();
       }, []);
       if (isLoading) {
